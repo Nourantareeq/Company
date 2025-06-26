@@ -1,0 +1,12 @@
+{
+  "Version": 1,
+  "Hash": "5DdGdFzBfEL0DtcvSPDwUXg57gUV2Bo4ESTVwx9al9g=",
+  "Source": "companymanager.API",
+  "BasePath": "_content/companymanager.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": [],
+  "Endpoints": []
+}
