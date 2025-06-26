@@ -2,7 +2,7 @@
 using Microsoft.EntityFrameworkCore;
 using CompanyManager.Api.Data;
 using CompanyManager.Api.Models;
-using CompanyManager.Api.Dtos; // ✅ استيراد DTO
+using CompanyManager.Api.Dtos;
 using Microsoft.AspNetCore.Authorization;
 
 namespace CompanyManager.Api.Controllers
@@ -21,16 +21,26 @@ namespace CompanyManager.Api.Controllers
 
         // GET: api/employees
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Employee>>> GetEmployees()
+        public async Task<ActionResult<IEnumerable<EmployeeDto>>> GetEmployees()
         {
-            return await _context.Employees
+            var employees = await _context.Employees
                 .Include(e => e.Department)
+                .Select(e => new EmployeeDto
+                {
+                    Id = e.Id,
+                    Name = e.Name,
+                    Position = e.Position,
+                    DepartmentId = e.DepartmentId,
+                    DepartmentName = e.Department.Name
+                })
                 .ToListAsync();
+
+            return Ok(employees);
         }
 
         // GET: api/employees/5
         [HttpGet("{id}")]
-        public async Task<ActionResult<Employee>> GetEmployee(int id)
+        public async Task<ActionResult<EmployeeDto>> GetEmployee(int id)
         {
             var employee = await _context.Employees
                 .Include(e => e.Department)
@@ -39,12 +49,21 @@ namespace CompanyManager.Api.Controllers
             if (employee == null)
                 return NotFound();
 
-            return employee;
+            var dto = new EmployeeDto
+            {
+                Id = employee.Id,
+                Name = employee.Name,
+                Position = employee.Position,
+                DepartmentId = employee.DepartmentId,
+                DepartmentName = employee.Department?.Name ?? ""
+            };
+
+            return Ok(dto);
         }
 
-        // ✅ POST: api/employees باستخدام DTO
+        // POST: api/employees
         [HttpPost]
-        public async Task<ActionResult<Employee>> PostEmployee(CreateEmployeeDto dto)
+        public async Task<ActionResult<EmployeeDto>> PostEmployee(CreateEmployeeDto dto)
         {
             var employee = new Employee
             {
@@ -56,12 +75,23 @@ namespace CompanyManager.Api.Controllers
             _context.Employees.Add(employee);
             await _context.SaveChangesAsync();
 
-            return CreatedAtAction(nameof(GetEmployee), new { id = employee.Id }, employee);
+            var department = await _context.Departments.FindAsync(dto.DepartmentId);
+
+            var dtoResponse = new EmployeeDto
+            {
+                Id = employee.Id,
+                Name = employee.Name,
+                Position = employee.Position,
+                DepartmentId = employee.DepartmentId,
+                DepartmentName = department?.Name ?? ""
+            };
+
+            return CreatedAtAction(nameof(GetEmployee), new { id = employee.Id }, dtoResponse);
         }
 
         // PUT: api/employees/5
         [HttpPut("{id}")]
-        public async Task<ActionResult<Employee>> PutEmployee(int id, Employee employee)
+        public async Task<ActionResult<EmployeeDto>> PutEmployee(int id, Employee employee)
         {
             if (id != employee.Id)
                 return BadRequest();
@@ -79,12 +109,24 @@ namespace CompanyManager.Api.Controllers
                 else
                     throw;
             }
-            var updatedEmployee = await _context.Employees
-        .Include(e => e.Department)
-        .FirstOrDefaultAsync(e => e.Id == id);
 
-            // ✅ رجّع الموظف المحدث
-            return Ok(employee);
+            var updated = await _context.Employees
+                .Include(e => e.Department)
+                .FirstOrDefaultAsync(e => e.Id == id);
+
+            if (updated == null)
+                return NotFound();
+
+            var dto = new EmployeeDto
+            {
+                Id = updated.Id,
+                Name = updated.Name,
+                Position = updated.Position,
+                DepartmentId = updated.DepartmentId,
+                DepartmentName = updated.Department?.Name ?? ""
+            };
+
+            return Ok(dto);
         }
 
         // DELETE: api/employees/5

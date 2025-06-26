@@ -1,0 +1,35 @@
+# Ignore build results
+bin/
+obj/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# VS Code settings
+.vscode/
+
+# Visual Studio
+.vs/
+
+# DLL and EXE files
+*.dll
+*.exe
+*.pdb
+
+# ASP.NET stuff
+appsettings.Development.json
+
+# Backup & logs
+*.log
+*.bak
+
+# Others
+*.sdf
+*.cache
+*.dbmdl
+*.suo
+*.sln.docstates
