@@ -1,13 +1,15 @@
-﻿namespace CompanyManager.Api.Models
-{
-    public class Employee
-    {
-        public int Id { get; set; }              
-        public string Name { get; set; } = "";  
-        public string Position { get; set; } = "";
-        public int DepartmentId { get; set; }
+﻿using CompanyManager.Api.Models;
 
-        
-        public Department? Department { get; set; } 
-    }
+public class Employee
+{
+    public int Id { get; set; }
+    public string Name { get; set; } = "";
+    public string Position { get; set; } = "";
+    public int DepartmentId { get; set; }
+
+    public string Email { get; set; } = "";
+    public string Phone { get; set; } = "";
+    public DateTime DateOfJoining { get; set; }
+
+    public Department? Department { get; set; }
 }

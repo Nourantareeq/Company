@@ -31,7 +31,10 @@ namespace CompanyManager.Api.Controllers
                     Name = e.Name,
                     Position = e.Position,
                     DepartmentId = e.DepartmentId,
-                    DepartmentName = e.Department.Name
+                    DepartmentName = e.Department.Name,
+                    Email = e.Email,
+                    Phone = e.Phone,
+                    DateOfJoining = e.DateOfJoining
                 })
                 .ToListAsync();
 
@@ -55,7 +58,10 @@ namespace CompanyManager.Api.Controllers
                 Name = employee.Name,
                 Position = employee.Position,
                 DepartmentId = employee.DepartmentId,
-                DepartmentName = employee.Department?.Name ?? ""
+                DepartmentName = employee.Department?.Name ?? "",
+                Email = employee.Email,
+                Phone = employee.Phone,
+                DateOfJoining = employee.DateOfJoining
             };
 
             return Ok(dto);
@@ -69,7 +75,10 @@ namespace CompanyManager.Api.Controllers
             {
                 Name = dto.Name,
                 Position = dto.Position,
-                DepartmentId = dto.DepartmentId
+                DepartmentId = dto.DepartmentId,
+                Email = dto.Email,
+                Phone = dto.Phone,
+                DateOfJoining = dto.DateOfJoining
             };
 
             _context.Employees.Add(employee);
@@ -83,7 +92,10 @@ namespace CompanyManager.Api.Controllers
                 Name = employee.Name,
                 Position = employee.Position,
                 DepartmentId = employee.DepartmentId,
-                DepartmentName = department?.Name ?? ""
+                DepartmentName = department?.Name ?? "",
+                Email = employee.Email,
+                Phone = employee.Phone,
+                DateOfJoining = employee.DateOfJoining
             };
 
             return CreatedAtAction(nameof(GetEmployee), new { id = employee.Id }, dtoResponse);
@@ -123,7 +135,10 @@ namespace CompanyManager.Api.Controllers
                 Name = updated.Name,
                 Position = updated.Position,
                 DepartmentId = updated.DepartmentId,
-                DepartmentName = updated.Department?.Name ?? ""
+                DepartmentName = updated.Department?.Name ?? "",
+                Email = updated.Email,
+                Phone = updated.Phone,
+                DateOfJoining = updated.DateOfJoining
             };
 
             return Ok(dto);
